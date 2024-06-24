@@ -2,6 +2,7 @@ package com.ticketbooking.ticketbooking.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,17 @@ public class EventController {
         }
     }
 
+    @GetMapping("/events/{id}")
+    public ResponseEntity<Event> getEventById(@PathVariable("id") long id) {
+        Optional<Event> eventData = eventRepository.findById(id);
+
+        if (eventData.isPresent()) {
+            return new ResponseEntity<>(eventData.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping("/events")
     public ResponseEntity<Event> createEvent(@RequestBody Event event) {
         try {
@@ -51,5 +63,20 @@ public class EventController {
         }
     }
 
+    @PutMapping("/events/{id}")
+    public ResponseEntity<Event> updateEvent(@PathVariable("id") long id, @RequestBody Event event) {
+        Optional<Event> eventData = eventRepository.findById(id);
+
+        if (eventData.isPresent()) {
+            Event _event = eventData.get();
+            _event.setName(event.getName());
+            _event.setDescription(event.getDescription());
+            _event.setDate(event.getDate());
+            _event.setPrice(event.getPrice());
+            return new ResponseEntity<>(eventRepository.save(_event), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
 }

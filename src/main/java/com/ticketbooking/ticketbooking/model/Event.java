@@ -35,6 +35,15 @@ public class Event {
         this.price = price;
     }
 
+    public Event(long id, String name, String description, LocalDate eventDate, float price) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.date = eventDate;
+        this.price = price;
+
+    }
+
     public long getId() {
         return id;
     }
